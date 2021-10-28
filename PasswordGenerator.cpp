@@ -10,14 +10,19 @@ only special characters or a mix of all of them.
 #include <stdlib.h>
 #include <time.h>
 #include <ctype.h>
+#include <string>
+#define LETTERS 52
+#define NUMBERS 10
+#define SCHARACTERS 8
 
 using namespace std;
 static int pl = 0;
+static int response = 0;
 //Try to create global/static variables to transfer customer needs into the generate pass function
 
 //Get the users requirements for the password
 int Needs();
-int generatePass(int Needs());
+string generatePass(int Needs(), int pl);
 //int optionsArray(response);
 
 int main()
@@ -27,9 +32,8 @@ int main()
     cout << "Minimum number of characters: ";
     cin >> numChar;
     pl = numChar;
-    cout << pl;
     Needs();
-    generatePass(Needs(),pl);
+    generatePass(Needs,pl);
 
     return 0;
 }
@@ -41,7 +45,6 @@ int Needs()
     string needChar;
     string needNum;
     string needSpecChar;
-    int response = 0;
 
 
     // Ask does it need user if password needs characters
@@ -67,8 +70,8 @@ int Needs()
         response = response + 3;
     }
     system("clear");
-    cout << "Minimum numbers: " << numChar << endl;
     cout << "Needs letters: " << needChar << endl;
+    cout << "Needs numbers: " << needNum << endl;
     cout << "Needs special characters: " << needSpecChar << endl;
 
     return response;
@@ -76,38 +79,86 @@ int Needs()
 
 
 // Creates the password based off of the needs
-int generatePass(int Needs(),int pl)
+string generatePass(int Needs(),int pl)
 {
-    string numbers[] = "0123456789";
-    string letters[] = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
-    string chracters[] = "!@#$%&=";
+    int buildpass;
+    int rdm; 
+    char numbers[NUMBERS] = {'0','1','2','3','4','5','6','7','8','9'};
+    char letters[LETTERS] = {'A','a','B','b','C','c','D','d','E','e','F','f','G','g','H','h','I','i','J','j','K','k','L','l','M','m','N','n','O','o','P','p','Q','q','R','r','S','s','T','t','U','u','V','v','W','w','X','x','Y','y','Z','z'};
+    char characters[SCHARACTERS] = {'!','@','#','$','%','&','=','-'};
 
-    string password;
+    string password = "";
 
-    while(strlen(password) < pl)
+    while(password.length() < pl)
     {
         //Only needs letters in password
         if (response == 1)
         {
-            int letter = rand() % letters[];
+            buildpass = (rand() % 3) + 1;
+            for(int i = 0; i < buildpass; i++)
+            {
+                rdm = rand() % LETTERS;
+                char letter = letters[rdm];
+                password = password + letter;
+            }
         }
         //only needs numbers
         if (response == 2)
         {
-            int letter = rand() % letters[];
+            buildpass = (rand() % 3) + 1;
+            for(int i = 0; i < buildpass; i++)
+            {
+                rdm = rand() % NUMBERS;
+                char number = numbers[rdm];
+                password = password + number;
+            }
         }
         //needs letters and numbers
         if (response == 3)
         {   
-
-            int number = rand() % letter[];
+            buildpass = (rand() % 3) + 1;
+            for(int i = 0; i < buildpass; i++)
+            {
+                rdm = rand() % LETTERS;
+                char letter = letters[rdm];
+                password = password + letter;
+            }            
+            buildpass = (rand() % 3) + 1;
+            for(int i = 0; i < buildpass; i++)
+            {
+                rdm = rand() % NUMBERS;
+                char number = numbers[rdm];
+                password = password + number;
+            }
         }
         //Needs letters numbers and special characters
         if (response == 6)
         {
-            int sc = (rand() % letter[]);
-        }
+            buildpass = (rand() % 3) + 1;
+            for(int i = 0; i < buildpass; i++)
+            {
+                rdm = rand() % LETTERS;
+                char letter = letters[rdm];
+                password = password + letter;
+            }            
+            buildpass = (rand() % 3) + 1;
+            for(int i = 0; i < buildpass; i++)
+            {
+                rdm = rand() % NUMBERS;
+                char number = numbers[rdm];
+                password = password + number;
+            }
+            buildpass = (rand() % 2) + 1;
+            for(int i = 0; i < buildpass; i++)
+            {
+                rdm = rand() % SCHARACTERS;
+                char sc = characters[rdm];
+                password = password + sc;
+            }
+        } 
     }
+    system("clear");
+    cout << "Generated password is: " << password << endl;
     return password;
 }
 
